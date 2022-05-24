@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?><!--声明XML的版本号和编码-->
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd"><!--MyBatis配置文件里的约束-->
+<configuration>
+    <!--引入properties配置文件-->
+    <properties resource="jdbc.properties"></properties>
+
+    <!--设置Mybatis的全局配置-->
+    <settings>
+        <!--开启延迟加载-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+    </settings>
+
+    <!--类型别名，默认类名，且不区分大小写，-->
+    <typeAliases>
+        <package name="com.len.mybatis.pojo"/>
+    </typeAliases>
+    <!--
+        environments:配置多个连接数据库的环境
+           属性：
+             default：设置默认使用环境的ID
+    -->
+    <environments default="development">
+        <!--
+         environment：配置某个具体的环境
+            属性：
+                id：表示连接数据库的唯一标识，不能重复
+
+        -->
+        <environment id="development">
+            <!--transactionManager：设置事务管理方式
+                属性：
+                    type="JDBC/MANAGED"
+                    JDBC:表示在当前环境中，执行SQL时，使用的时JDBC中的原生事务管理方式，事务的提交和回滚需要手动处理
+                    MANAGED:被管理，例如Spring
+            -->
+            <transactionManager type="JDBC"/><!--设置事务管理器的类型为JDBC-->
+            <!--dataSource:配置数据源
+                type:设置数据源的类型
+                    值：POOLED:表示使用数据库连接池缓存数据库连接
+                    UNPOOLED：表示不适用数据可以连接
+                    JNDI：表示使用上下文中的数据源
+            -->
+            <dataSource type="POOLED"><!--数据源-->
+                <!--设置连接数据库的驱动-->
+                <property name="driver" value="${jdbc.driver}"/>
+                <!--设置连接数据的连接地址-->
+                <property name="url" value="${jdbc.url}"/>
+                <!--设置数据库的账号-->
+                <property name="username" value="${jdbc.username}"/>
+                <!--设置数据库的密码-->
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--引入映射文件-->
+    <mappers>
+        <!-- <mapper resource="com.len.mybatis.mapper.UserMapper"></mapper>-->
+        <!--
+            以包为单位引入映射文件
+            要求：
+            1.mapper所在的包要和映射文件所在包一致
+            2.mapper接口要和映射文件名字一致
+        -->
+        <package name="com.len.mybatis.mapper"/>
+    </mappers>
+</configuration>
